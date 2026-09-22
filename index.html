@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Construcción y Supervisión AZAPI. Construcción, remodelación, supervisión de obra y Seguridad e Higiene Industrial (EHS).">
+  <meta name="theme-color" content="#06213d">
+  <title>Construcción y Supervisión AZAPI</title>
+  <link rel="icon" href="assets/logo-azapi.png" type="image/png">
+  <style>
+    :root{
+      --navy:#06213d;
+      --navy2:#0a3158;
+      --gold:#f5bd16;
+      --gold2:#ffd34f;
+      --white:#fff;
+      --text:#17304b;
+      --muted:#617083;
+      --light:#f5f7fa;
+      --line:#dfe5eb;
+      --shadow:0 18px 45px rgba(4,25,47,.13);
+      --radius:18px;
+      --max:1180px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:Arial,Helvetica,sans-serif;color:var(--text);background:#fff;line-height:1.6}
+    img{max-width:100%;display:block}
+    a{text-decoration:none;color:inherit}
+    .container{width:min(92%,var(--max));margin:auto}
+    .topbar{background:#04182d;color:#cdd8e5;font-size:13px}
+    .topbar .container{display:flex;justify-content:flex-end;gap:25px;padding:7px 0}
+    header{position:sticky;top:0;z-index:1000;background:rgba(6,33,61,.97);box-shadow:0 4px 20px rgba(0,0,0,.15)}
+    .nav{height:82px;display:flex;align-items:center;justify-content:space-between;gap:25px}
+    .brand{display:flex;align-items:center;gap:12px;min-width:210px}
+    .brand img{width:64px;height:64px;object-fit:contain;border-radius:8px}
+    .brand strong{font-family:Georgia,serif;color:#fff;font-size:17px;line-height:1.05;letter-spacing:.8px}
+    .brand span{display:block;color:var(--gold);font-size:25px;letter-spacing:4px;margin-top:3px}
+    nav ul{display:flex;align-items:center;gap:25px;list-style:none;color:#fff;font-size:14px;font-weight:700}
+    nav a{opacity:.9;transition:.2s}
+    nav a:hover,nav a.active{color:var(--gold)}
+    .whatsapp{background:var(--gold);color:#122b44;padding:12px 18px;border-radius:30px;font-weight:800;white-space:nowrap}
+    .menu-btn{display:none;background:none;border:1px solid #53708c;color:#fff;border-radius:8px;padding:8px 10px;font-size:20px}
+    .hero{background:linear-gradient(90deg,#031a31 0%,#06213d 44%,rgba(6,33,61,.35) 100%),url('assets/proyecto-izaje.jpg') center/cover;min-height:610px;display:flex;align-items:center}
+    .hero-content{max-width:680px;color:#fff;padding:80px 0}
+    .eyebrow{color:var(--gold);font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+    .hero h1{font-family:Georgia,serif;font-size:clamp(40px,5vw,66px);line-height:1.02;margin-bottom:20px}
+    .hero h1 span{color:var(--gold)}
+    .hero p{font-size:19px;color:#e8eef5;max-width:650px;margin-bottom:30px}
+    .buttons{display:flex;gap:14px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 22px;border-radius:8px;font-weight:800;border:2px solid transparent;transition:.2s}
+    .btn-primary{background:var(--gold);color:#102943}
+    .btn-primary:hover{background:var(--gold2);transform:translateY(-2px)}
+    .btn-outline{border-color:#fff;color:#fff}
+    .btn-outline:hover{background:#fff;color:var(--navy)}
+    .stats{background:#fff;box-shadow:var(--shadow);position:relative;margin-top:-45px;border-radius:16px;display:grid;grid-template-columns:repeat(4,1fr);overflow:hidden}
+    .stat{padding:25px;text-align:center;border-right:1px solid var(--line)}
+    .stat:last-child{border:0}.stat strong{display:block;color:var(--navy);font-size:18px}.stat small{color:var(--muted)}
+    section{padding:90px 0}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:40px}
+    .kicker{color:#d09d00;font-weight:900;text-transform:uppercase;letter-spacing:2px;font-size:13px}
+    h2{font-family:Georgia,serif;color:var(--navy);font-size:clamp(30px,4vw,44px);line-height:1.1;margin-top:6px}
+    .lead{color:var(--muted);max-width:720px}
+    .about{background:var(--light)}
+    .about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:55px;align-items:center}
+    .about-card{background:#fff;padding:36px;border-radius:var(--radius);box-shadow:var(--shadow);border-left:6px solid var(--gold)}
+    .about-card p{color:var(--muted);margin:14px 0}
+    .checklist{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+    .check{font-weight:700}.check::before{content:"✓";color:#d19e00;font-weight:900;margin-right:8px}
+    .services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    .service{padding:30px 24px;border:1px solid var(--line);border-radius:var(--radius);background:#fff;transition:.25s}
+    .service:hover{transform:translateY(-7px);box-shadow:var(--shadow);border-color:#f1c43d}
+    .icon{width:52px;height:52px;border-radius:13px;background:#fff4cc;color:#bd8c00;display:grid;place-items:center;font-size:27px;margin-bottom:20px}
+    .service h3{font-size:19px;color:var(--navy);margin-bottom:12px}
+    .service ul{list-style:none;color:var(--muted);font-size:14px}
+    .service li{margin:7px 0}.service li::before{content:"•";color:var(--gold);font-weight:900;margin-right:8px}
+    .clients{background:#f7f9fb}
+    .client-list{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:35px}
+    .client{min-height:95px;background:#fff;border:1px solid var(--line);border-radius:14px;display:grid;place-items:center;text-align:center;padding:15px;font-size:20px;font-weight:900;color:var(--navy)}
+    .client:nth-child(2){color:#5c8c36}.client:nth-child(3){color:#1168b1}.client:nth-child(4){color:#555}.client:nth-child(5){color:#273e5c}
+    .projects{background:#fff}
+    .gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    .project{position:relative;overflow:hidden;border-radius:15px;min-height:310px;background:#ddd}
+    .project img{width:100%;height:100%;object-fit:cover;transition:.4s}
+    .project:hover img{transform:scale(1.06)}
+    .project::after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,rgba(3,24,44,.9))}
+    .project figcaption{position:absolute;z-index:2;bottom:18px;left:18px;right:18px;color:#fff;font-weight:800;font-size:16px}
+    .project.wide{grid-column:span 2}
+    .why{background:linear-gradient(100deg,#031a31,#0b355d);color:#fff}
+    .why h2{color:#fff}.why .lead{color:#d5e0eb}
+    .why-grid{display:grid;grid-template-columns:1fr 2fr;gap:60px;align-items:center}
+    .benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:25px}
+    .benefit{border-left:1px solid #58728d;padding-left:22px}.benefit b{display:block;color:var(--gold);font-size:19px;margin-bottom:6px}.benefit p{color:#d5e0eb;font-size:14px}
+    .contact{background:#f6f8fa}
+    .contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:35px}
+    .contact-info{background:var(--navy);color:#fff;border-radius:var(--radius);padding:42px}
+    .contact-info h2{color:#fff;margin-bottom:15px}.contact-info p{color:#d8e1eb}
+    .contact-item{display:flex;gap:13px;align-items:center;margin-top:23px;font-weight:700}
+    .contact-icon{width:40px;height:40px;border-radius:50%;background:var(--gold);color:#122b44;display:grid;place-items:center}
+    form{background:#fff;border-radius:var(--radius);padding:35px;box-shadow:var(--shadow)}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+    label{font-size:13px;font-weight:800;color:var(--navy);display:block;margin-bottom:6px}
+    input,textarea{width:100%;padding:13px;border:1px solid #ccd5df;border-radius:8px;font:inherit;outline:none}
+    input:focus,textarea:focus{border-color:var(--gold)}textarea{min-height:125px;resize:vertical}
+    .full{grid-column:1/-1}.form-btn{border:0;cursor:pointer;margin-top:5px;width:100%}
+    footer{background:#04182d;color:#b9c8d8;padding:22px 0;font-size:13px}
+    footer .container{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+    footer strong{color:#fff}
+    .floating-wa{position:fixed;right:20px;bottom:20px;width:58px;height:58px;border-radius:50%;background:#20bd63;color:#fff;display:grid;place-items:center;font-size:27px;z-index:999;box-shadow:0 8px 25px rgba(0,0,0,.25)}
+    @media(max-width:1000px){
+      nav ul{gap:14px}.services-grid{grid-template-columns:repeat(2,1fr)}.gallery{grid-template-columns:repeat(2,1fr)}
+      .client-list{grid-template-columns:repeat(3,1fr)}.why-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}
+      .stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+    }
+    @media(max-width:760px){
+      .topbar{display:none}.nav{height:72px}.brand img{width:55px;height:55px}.brand strong{font-size:13px}.brand span{font-size:19px}
+      .menu-btn{display:block}nav{position:absolute;left:0;right:0;top:72px;background:var(--navy);display:none;padding:15px 4% 25px}nav.open{display:block}nav ul{flex-direction:column;align-items:flex-start;gap:17px}
+      .nav .whatsapp{display:none}.hero{min-height:650px}.hero-content{padding:70px 0}.hero p{font-size:17px}
+      section{padding:65px 0}.about-grid,.contact-grid{grid-template-columns:1fr}.services-grid{grid-template-columns:1fr}.gallery{grid-template-columns:1fr}.project.wide{grid-column:auto}
+      .client-list{grid-template-columns:1fr 1fr}.benefits{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}
+      .section-head{display:block}.section-head .lead{margin-top:12px}
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar"><div class="container"><span>Construcción • Remodelación • Supervisión • EHS</span><span>Atención a proyectos comerciales e industriales</span></div></div>
+
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#inicio" aria-label="AZAPI Inicio">
+        <img src="assets/logo-azapi.png" alt="Logo Construcción y Supervisión AZAPI">
+        <strong>CONSTRUCCIÓN Y<br>SUPERVISIÓN <span>AZAPI</span></strong>
+      </a>
+      <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
+      <nav id="nav">
+        <ul>
+          <li><a class="active" href="#inicio">Inicio</a></li>
+          <li><a href="#nosotros">Nosotros</a></li>
+          <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#proyectos">Proyectos</a></li>
+          <li><a href="#clientes">Clientes</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+      <a class="whatsapp" href="https://wa.me/525625997656" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="container">
+        <div class="hero-content">
+          <div class="eyebrow">Construcción • Supervisión • EHS</div>
+          <h1>Tu proyecto,<br><span>nuestra prioridad.</span></h1>
+          <p>Soluciones integrales de construcción, remodelación, supervisión de obra y Seguridad e Higiene Industrial para proyectos comerciales e industriales.</p>
+          <div class="buttons">
+            <a class="btn btn-primary" href="#contacto">Solicitar cotización →</a>
+            <a class="btn btn-outline" href="https://wa.me/525625997656" target="_blank" rel="noopener">Contáctanos por WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <div class="stats">
+        <div class="stat"><strong>Construcción</strong><small>Soluciones en obra</small></div>
+        <div class="stat"><strong>Remodelación</strong><small>Espacios comerciales</small></div>
+        <div class="stat"><strong>Supervisión</strong><small>Control y seguimiento</small></div>
+        <div class="stat"><strong>EHS</strong><small>Seguridad e Higiene</small></div>
+      </div>
+    </div>
+
+    <section class="about" id="nosotros">
+      <div class="container about-grid">
+        <div>
+          <div class="kicker">Nosotros</div>
+          <h2>Experiencia, seguridad y calidad en cada proyecto.</h2>
+          <p class="lead" style="margin-top:18px">En Construcción y Supervisión AZAPI desarrollamos y supervisamos proyectos con enfoque en calidad, seguridad, cumplimiento y continuidad operativa.</p>
+          <div class="checklist">
+            <div class="check">Atención profesional</div>
+            <div class="check">Control de calidad</div>
+            <div class="check">Supervisión en campo</div>
+            <div class="check">Gestión EHS</div>
+            <div class="check">Control de contratistas</div>
+            <div class="check">Cumplimiento normativo</div>
+          </div>
+        </div>
+        <div class="about-card">
+          <div class="kicker">Nuestra propuesta</div>
+          <h3 style="font-size:27px;color:var(--navy);margin-top:5px">Un solo aliado para tu proyecto.</h3>
+          <p>Integramos construcción, remodelación, supervisión y seguridad para ayudar a nuestros clientes a mantener sus proyectos bajo control.</p>
+          <p><strong>Enfoque:</strong> prevención de riesgos, calidad de ejecución, seguimiento de avances y documentación de obra.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="servicios">
+      <div class="container">
+        <div class="section-head">
+          <div><div class="kicker">Lo que hacemos</div><h2>Servicios</h2></div>
+          <p class="lead">Servicios diseñados para proyectos comerciales, industriales y de remodelación.</p>
+        </div>
+        <div class="services-grid">
+          <article class="service"><div class="icon">🏗</div><h3>Construcción</h3><ul><li>Obra civil</li><li>Adecuaciones</li><li>Acabados</li><li>Pisos y recubrimientos</li><li>Trabajos de mantenimiento</li></ul></article>
+          <article class="service"><div class="icon">📋</div><h3>Supervisión de Obra</h3><ul><li>Control de calidad</li><li>Seguimiento de avances</li><li>Control de contratistas</li><li>Reportes de obra</li><li>Entrega y cierre</li></ul></article>
+          <article class="service"><div class="icon">🦺</div><h3>Seguridad e Higiene Industrial (EHS)</h3><ul><li>Supervisión EHS</li><li>Análisis de riesgos</li><li>Permisos de trabajo</li><li>Trabajos de alto riesgo</li><li>Capacitación y auditorías</li></ul></article>
+          <article class="service"><div class="icon">🏢</div><h3>Remodelación Comercial</h3><ul><li>Tiendas</li><li>Oficinas</li><li>Áreas comerciales</li><li>Adecuaciones</li><li>Coordinación de obra</li></ul></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="clients" id="clientes">
+      <div class="container">
+        <div class="section-head">
+          <div><div class="kicker">Experiencia</div><h2>Nuestros clientes</h2></div>
+          <p class="lead">Empresas con las que se han desarrollado proyectos y servicios.</p>
+        </div>
+        <div class="client-list">
+          <div class="client">Walmart</div>
+          <div class="client">La Comer</div>
+          <div class="client">Coppel</div>
+          <div class="client">INTERCERAMIC</div>
+          <div class="client">CMFS</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="projects" id="proyectos">
+      <div class="container">
+        <div class="section-head">
+          <div><div class="kicker">Experiencia en campo</div><h2>Nuestros proyectos</h2></div>
+          <p class="lead">Resultados y control en cada etapa de los trabajos.</p>
+        </div>
+        <div class="gallery">
+          <figure class="project wide"><img src="assets/proyecto-remodelacion.jpg" alt="Trabajos de remodelación y acabados"><figcaption>Remodelación y acabados</figcaption></figure>
+          <figure class="project"><img src="assets/proyecto-seguridad.jpg" alt="Control y señalización de áreas"><figcaption>Control y señalización de áreas</figcaption></figure>
+          <figure class="project"><img src="assets/proyecto-izaje.jpg" alt="Maniobra de izaje"><figcaption>Maniobras y trabajos de alto riesgo</figcaption></figure>
+          <figure class="project wide"><img src="assets/proyecto-supervision.jpg" alt="Supervisión de obra"><figcaption>Supervisión y coordinación de personal</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="why">
+      <div class="container why-grid">
+        <div>
+          <div class="kicker">Nuestro compromiso</div>
+          <h2>¿Por qué elegir AZAPI?</h2>
+          <p class="lead" style="margin-top:15px">Un enfoque integral para mantener calidad, seguridad y control durante la ejecución.</p>
+        </div>
+        <div class="benefits">
+          <div class="benefit"><b>✓ Seguridad</b><p>Prevención y control de riesgos en campo.</p></div>
+          <div class="benefit"><b>✓ Calidad</b><p>Seguimiento de ejecución y entregables.</p></div>
+          <div class="benefit"><b>✓ Control</b><p>Avances, contratistas y documentación.</p></div>
+          <div class="benefit"><b>✓ Cumplimiento</b><p>Enfoque en requisitos del proyecto y EHS.</p></div>
+          <div class="benefit"><b>✓ Comunicación</b><p>Reportes y seguimiento oportuno.</p></div>
+          <div class="benefit"><b>✓ Servicio</b><p>Atención profesional y orientada al cliente.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contacto">
+      <div class="container contact-grid">
+        <div class="contact-info">
+          <div class="kicker">Hablemos de tu proyecto</div>
+          <h2>Solicita una cotización</h2>
+          <p>Cuéntanos qué necesitas y nos pondremos en contacto contigo.</p>
+          <div class="contact-item"><span class="contact-icon">☎</span><span>5625 997656</span></div>
+          <div class="contact-item"><span class="contact-icon">✉</span><span>csazapi@gmail.com</span></div>
+          <div class="contact-item"><span class="contact-icon">WA</span><a href="https://wa.me/525625997656" target="_blank" rel="noopener">Enviar WhatsApp</a></div>
+        </div>
+        <form id="contactForm">
+          <div class="form-grid">
+            <div><label for="nombre">Nombre</label><input id="nombre" name="nombre" required></div>
+            <div><label for="email">Correo electrónico</label><input id="email" name="email" type="email" required></div>
+            <div><label for="telefono">Teléfono</label><input id="telefono" name="telefono"></div>
+            <div><label for="empresa">Empresa</label><input id="empresa" name="empresa"></div>
+            <div class="full"><label for="mensaje">Cuéntanos sobre tu proyecto</label><textarea id="mensaje" name="mensaje" required></textarea></div>
+            <div class="full"><button class="btn btn-primary form-btn" type="submit">Enviar solicitud</button></div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div><strong>CONSTRUCCIÓN Y SUPERVISIÓN AZAPI</strong> · Construcción · Remodelación · Supervisión de Obra · EHS</div>
+      <div>© <span id="year"></span> AZAPI. Todos los derechos reservados.</div>
+    </div>
+  </footer>
+
+  <a class="floating-wa" href="https://wa.me/525625997656" target="_blank" rel="noopener" aria-label="WhatsApp">✆</a>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const nav = document.getElementById('nav');
+    menuBtn.addEventListener('click', () => nav.classList.toggle('open'));
+    document.querySelectorAll('nav a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // El formulario abre el correo del cliente con el mensaje preparado.
+    document.getElementById('contactForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const f = new FormData(this);
+      const subject = encodeURIComponent('Solicitud de cotización - AZAPI');
+      const body = encodeURIComponent(
+        'Nombre: ' + f.get('nombre') + '\\n' +
+        'Empresa: ' + f.get('empresa') + '\\n' +
+        'Teléfono: ' + f.get('telefono') + '\\n' +
+        'Correo: ' + f.get('email') + '\\n\\n' +
+        'Proyecto:\\n' + f.get('mensaje')
+      );
+      window.location.href = 'mailto:csazapi@gmail.com?subject=' + subject + '&body=' + body;
+    });
+  </script>
+</body>
+</html>
